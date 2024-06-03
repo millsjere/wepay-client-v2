@@ -6,7 +6,9 @@ const Signup = lazy(() => import('../pages/auth/Register'))
 const ForgotPassword = lazy(() => import('../pages/auth/ForgotPassword'))
 const ResetPassword = lazy(() => import('../pages/auth/ResetPassword'))
 
+
 // Private Routes
+const VerifyAccount = lazy(() => import('../pages/auth/Verify'))
 const Dashboard = lazy(() => import('../pages/user/Overview'))
 
 
@@ -39,6 +41,13 @@ const ResetPasswordRoute =
     isAuth: false
 }
 
+const VerifyAccountRoute =
+{
+    path: '/verify',
+    component: VerifyAccount,
+    isAuth: false
+}
+
 const DashboardRoute =
 {
     path: '/dashboard',
@@ -56,6 +65,7 @@ export const appRoutes = [
     SignupRoute,
     ForgotPasswordRoute,
     ResetPasswordRoute,
+    VerifyAccountRoute,
     DashboardRoute
 
 ]

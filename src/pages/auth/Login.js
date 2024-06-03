@@ -2,11 +2,12 @@ import { InputAdornment, styled, TextField, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { loginUser, successModal } from '../../actions/actions';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import RoundButton from '../../components/RoundButton';
 import { ArrowForward, Call } from '@mui/icons-material';
 import AuthWrapper from './AuthWrapper';
 import Slide from '../../assets/images/slider1.jpg'
+import base from '../../config/apis';
 
 const InputField = styled(TextField)(({ theme }) => ({
   marginBottom: '1.5rem',
@@ -26,23 +27,24 @@ const InputField = styled(TextField)(({ theme }) => ({
 
 
 const Login = (props) => {
-  const { currentUser, successModal } = props
   const modalDispatch = useDispatch()
   const [load, setLoad] = React.useState(false)
   const [error, setError] = React.useState(false)
   const [phone, setPhone] = React.useState('')
-  const path = useLocation();
-  // const token = path.search.split('=')[1]
-  //console.log(path)
 
+  const getAuth = async() => {
+    try {
+      const url = '/auth/request/'
+      const { data: res} = await base.get(url)
+      console.log(res)
+    } catch (error) {
+      console.log(error?.response)
+    }
+  }
 
   useEffect(() => {
-    if (currentUser === false && path.search !== '') {
-      successModal('Activating your account. Please login to complete')
-      return
-    }
-
-  }, [currentUser, path, successModal])
+    getAuth()
+  },[])
 
 
   const onFormSubmit = async () => {

@@ -19,7 +19,6 @@ const Register = (props) => {
   const [step, setStep] = useState(0)
   const [toggle, setToggle] = useState(false)
   const [terms, setTerms] = useState(false)
-  const [error, setError] = useState({ isError: false, text: '' })
   const [load, setLoad] = useState(false)
 
   // fields
@@ -187,7 +186,7 @@ const Register = (props) => {
                     onChange={(e) => dispatch({ type: field?.action, payload: e.target.value })}
                     isRequired={true}
                     label={field?.label}
-                    error={error}
+
                     fullWidth isSelect={true}
                   >
                     <MenuItem value='MALE' >Male</MenuItem>
@@ -201,7 +200,6 @@ const Register = (props) => {
                     onChange={(e) => dispatch({ type: field?.action, payload: e.target.value })}
                     isRequired={true}
                     label={field?.label}
-                    error={error}
                     fullWidth
                   />
               ))
@@ -240,7 +238,7 @@ const Register = (props) => {
                     onChange={(e) => dispatch({ type: el?.action, payload: e.target.value })}
                     isRequired={true}
                     label={el?.label}
-                    error={error}
+
                     fullWidth
 
                   />
@@ -261,7 +259,6 @@ const Register = (props) => {
                   isRequired={true}
                   label={field?.label}
                   helperText=''
-                  error={error}
                   inputProps={{ min: field?.min ? field?.min : null }}
                   fullWidth
                 />
@@ -281,7 +278,6 @@ const Register = (props) => {
                   isRequired={true}
                   label={field?.label}
                   helperText=''
-                  error={error}
                   fullWidth
                   InputProps={{ endAdornment: <InputAdornment position='end' onClick={() => setToggle(!toggle)} > {toggle ? <Visibility sx={{ cursor: 'pointer' }} fontSize='small' /> : <VisibilityOff sx={{ cursor: 'pointer' }} fontSize='small' />} </InputAdornment> }}
                 />
