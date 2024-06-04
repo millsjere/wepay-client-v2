@@ -1,10 +1,15 @@
 import React from 'react';
-import { connect } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 import { resetModal } from '../actions/actions';
 import { Snackbar, Alert } from '@mui/material'
+import Slide from '@mui/material/Slide';
+
+function SlideTransition(props) {
+  return <Slide {...props} direction="left" />;
+}
 
 const Modal = (props) => {
-  //console.log(props)
+  const dispatch = useDispatch()
   const [open, setOpen] = React.useState(true);
 
   const handleClose = (event, reason) => {
@@ -12,11 +17,11 @@ const Modal = (props) => {
       return;
     }
     setOpen(false);
-    props.resetModal()
+    dispatch({ type: 'RESET_MODAL' })
   };
 
   return (
-    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'right', }}>
+    <Snackbar open={open} autoHideDuration={3000} TransitionComponent={SlideTransition} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'right', }}>
       <Alert variant='filled' elevation={1} severity={props.modal.status} onClose={handleClose}> {props.modal.message} </Alert>
     </Snackbar>
   )

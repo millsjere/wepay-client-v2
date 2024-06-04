@@ -9,7 +9,7 @@ const ResetPassword = lazy(() => import('../pages/auth/ResetPassword'))
 
 // Private Routes
 const VerifyAccount = lazy(() => import('../pages/auth/Verify'))
-const Dashboard = lazy(() => import('../pages/user/Overview'))
+const Dashboard = lazy(() => import('../pages/account/Dashboard'))
 
 
 // Routes 

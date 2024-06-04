@@ -7,7 +7,7 @@ import RoundButton from '../../components/RoundButton';
 import { ArrowForward, Call } from '@mui/icons-material';
 import AuthWrapper from './AuthWrapper';
 import Slide from '../../assets/images/slider1.jpg'
-import { getData, saveData } from '../../config/appConfig';
+import { saveData } from '../../config/appConfig';
 import base from '../../config/apis';
 
 const InputField = styled(TextField)(({ theme }) => ({
@@ -34,7 +34,7 @@ const Login = (props) => {
   const [error, setError] = React.useState(false)
   const [phone, setPhone] = React.useState('')
 
-  console.log(getData('uid'))
+  // console.log(getData('uid'))
 
 
   const onFormSubmit = async () => {
@@ -49,13 +49,14 @@ const Login = (props) => {
       const url = '/auth/login'
       const { data: res } = await base.post(url, { phone })
       if (res?.status === 'success') {
+        // console.log(res?.data)
         saveData('uac', res?.data?.ac)
         saveData('uid', res?.data?.user)
         saveData('exp', res?.expiry)
-        dispatch({ type: 'SUCCESS', payload: 'Login successful' })
+        dispatch({ type: 'SUCCESS', payload: 'User Login successful' })
+        setLoad(false)
+        navigate('/verify', { replace: true })
       }
-      setLoad(false)
-      navigate('/verify')
     } catch (error) {
       console.log(error?.response)
       dispatch({ type: 'ERROR', payload: error?.response?.data?.message })
@@ -71,7 +72,8 @@ const Login = (props) => {
         title={<Typography sx={{ fontWeight: 500, mb: .5 }} variant='h5'>Welcome Back</Typography>}
         subtitle={<Typography sx={{ mb: 3 }} paragraph color='textSecondary'>Please enter your details to login</Typography>}
         image={Slide}
-        order={1} imagePosition={'right'}
+        order={1} 
+        imagePosition={'right'}
       >
         <div>
           <InputField variant='outlined' error={error}
