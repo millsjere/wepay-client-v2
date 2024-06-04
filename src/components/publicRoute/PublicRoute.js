@@ -1,15 +1,23 @@
 import React from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
-import { isAuth } from '../../config/appConfig'
+import { getData, isAuth } from '../../config/appConfig'
 import Loader from '../Loader'
 
 const PublicRoute = () => {
   const auth = isAuth()
+  const user = getData('uid')
 
-  if (auth) {
+  if (auth && user?.isVerified) {
     return (
       <React.Suspense fallback={<Loader />}>
-        <Navigate to={'/welcome'} replace />
+        <Navigate to={'/dashboard'} replace />
+      </React.Suspense>
+    )
+  }
+  if (auth && !user?.isVerified) {
+    return (
+      <React.Suspense fallback={<Loader />}>
+        <Navigate to={'/verify'} replace />
       </React.Suspense>
     )
   } else {

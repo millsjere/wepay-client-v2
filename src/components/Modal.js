@@ -16,7 +16,7 @@ const Modal = (props) => {
   };
 
   return (
-    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center', }}>
+    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'right', }}>
       <Alert variant='filled' elevation={1} severity={props.modal.status} onClose={handleClose}> {props.modal.message} </Alert>
     </Snackbar>
   )

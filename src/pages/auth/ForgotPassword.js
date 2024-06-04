@@ -6,8 +6,7 @@ import { forgortPassword } from '../../actions/actions';
 import { useState } from 'react';
 import Slide from '../../assets/images/pay4.jpeg'
 import AuthWrapper from './AuthWrapper';
-import { Link } from 'react-router-dom';
-import { AlternateEmail, ArrowForward, Call, EmailOutlined, SendToMobileOutlined } from '@mui/icons-material';
+import { AlternateEmail, ArrowBack, Call, EmailOutlined, SendToMobileOutlined } from '@mui/icons-material';
 import RoundButton from '../../components/RoundButton';
 import InputField from '../../components/InputField';
 
@@ -30,13 +29,13 @@ const useStyles = makeStyles(theme => ({
 
 }))
 
-const SwitchMethod = ({title, subtitle, onClick, icon}) => {
+const SwitchMethod = ({ title, subtitle, onClick, icon }) => {
   return (
-    <Box p={3} borderRadius={'10px'} textAlign={'left'} mb={2} border={ '1px solid lightgrey'} onClick={onClick}
-      sx={{cursor: 'pointer', transition: 'all .2s ease-in', '&:hover': { border: `1px solid orange`}}}>
-        {icon}
-        <Typography variant='h6' fontSize={'1rem'}>{title}</Typography>
-        <Typography variant='body2' color={'GrayText'}>{subtitle}</Typography>
+    <Box p={3} borderRadius={'10px'} textAlign={'left'} mb={2} border={'1px solid lightgrey'} onClick={onClick}
+      sx={{ cursor: 'pointer', transition: 'all .2s ease-in', '&:hover': { border: `1px solid orange` } }}>
+      {icon}
+      <Typography variant='h6' fontSize={'1rem'}>{title}</Typography>
+      <Typography variant='body1' color={'GrayText'}>{subtitle}</Typography>
     </Box>
   )
 }
@@ -56,6 +55,8 @@ const ForgotPassword = (props) => {
         return { ...state, email: action.payload }
       case "SMS":
         return { ...state, phone: action?.payload }
+      case "RESET":
+        return { email: '', phone: '' }
       default:
         return state
     }
@@ -65,12 +66,17 @@ const ForgotPassword = (props) => {
   const onFormSubmit = async (e) => {
     e.preventDefault()
     // validate 
-    if(active === 'sms' && (formInput?.phone === '' || formInput?.phone?.length < 10)) return props?.errorModal('Invalid. Please provide the valid number')
-    if(active === 'email' && (formInput?.email === '' || !formInput?.email?.include('@'))) return props?.errorModal('Invalid. Please provide the valid email address')
+    if (active === 'sms' && (formInput?.phone === '' || formInput?.phone?.length < 10)) return props?.errorModal('Invalid. Please provide the valid number')
+    if (active === 'email' && (formInput?.email === '' || !formInput?.email?.include('@'))) return props?.errorModal('Invalid. Please provide the valid email address')
     setLoad(true)
     // call action creators
     await props.forgortPassword(formInput)
     setLoad(false)
+  }
+
+  const reset = () => {
+    setStep(0)
+    dispatch({ type: 'RESET' })
   }
 
 
@@ -84,46 +90,48 @@ const ForgotPassword = (props) => {
       >
         <div>
           {
-            step === 0 && 
+            step === 0 &&
             <>
               <SwitchMethod
                 title={'Reset via SMS'}
                 subtitle={'You will receive a verification token via SMS, enabling you to set a new password'}
-                onClick={()=>{ setActive('sms'); setStep(1) }}
+                onClick={() => { setActive('sms'); setStep(1) }}
                 icon={<SendToMobileOutlined fontSize='small' color='primary' />}
               />
               <SwitchMethod
                 title={'Reset via Email'}
                 subtitle={'You will be provided a unique token sent to your registered email address'}
-                onClick={()=>{setActive('email'); setStep(1) }}
+                onClick={() => { setActive('email'); setStep(1) }}
                 icon={<EmailOutlined fontSize='small' color='primary' />}
               />
             </>
           }
           {
-            step === 1 && 
+            step === 1 &&
             <>
               <form onSubmit={(e) => onFormSubmit(e)}>
-              {
-                active === 'sms' ? 
-                <InputField className={classes.field} variant='outlined' label='Phone Number' helperText=''
-                  value={formInput.phone} inputProps={{ maxLength: 10 }} 
-                  InputProps={{ endAdornment: <InputAdornment position='start'><Call fontSize='small' /></InputAdornment> }}
-                  onChange={(e) => dispatch({ type: "SMS", payload: e.target.value })} fullWidth
-                />
-                :
-                <InputField className={classes.field} variant='outlined' label='Email' helperText=''
-                  value={formInput.email}
-                  InputProps={{ endAdornment: <InputAdornment position='start'><AlternateEmail fontSize='small' /></InputAdornment> }}
-                  onChange={(e) => dispatch({ type: "EMAIL", payload: e.target.value })} fullWidth
-                />
-              }
+                {
+                  active === 'sms' ?
+                    <InputField className={classes.field} variant='outlined' label='Phone Number' helperText=''
+                      value={formInput.phone} inputProps={{ maxLength: 10 }} placeholder={'054*******'}
+                      InputProps={{ endAdornment: <InputAdornment position='start'><Call fontSize='small' /></InputAdornment> }}
+                      onChange={(e) => dispatch({ type: "SMS", payload: e.target.value })} fullWidth
+                    />
+                    :
+                    <InputField className={classes.field} variant='outlined' label='Email' helperText=''
+                      value={formInput.email}
+                      InputProps={{ endAdornment: <InputAdornment position='start'><AlternateEmail fontSize='small' /></InputAdornment> }}
+                      onChange={(e) => dispatch({ type: "EMAIL", payload: e.target.value })} fullWidth
+                    />
+                }
                 <RoundButton
                   loading={load} sx={{ mt: '.5rem' }}
                   text='Reset Password' variant={'contained'} color='secondary'
                   disableElevation type='submit' fullWidth />
               </form>
-              <Typography textAlign={'center'} mt={4} display={'flex'} gap={.5} justifyContent={'center'} >Don't have an account? <Link to={'/signup'} style={{ color: '#f6a200', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '.2rem' }}>Sign up <ArrowForward fontSize='small' /></Link> </Typography>
+              <Typography textAlign={'center'} sx={{ cursor: 'pointer' }}
+                mt={4} display={'flex'} color={'primary'} onClick={reset}
+                alignItems={'center'} gap={.5} justifyContent={'center'} ><ArrowBack fontSize='small' /> Go Back </Typography>
             </>
           }
         </div>

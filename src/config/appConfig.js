@@ -1,14 +1,39 @@
-import Cookies from 'js-cookie'
-import { jwtDecode } from "jwt-decode";
+import CryptoJS from 'crypto-js'
 
-
-const token = Cookies.get('user_jwt');
+const uniqueBaseKey = "08520";
 
 export const isAuth = () => {
-    token ? console.log('TOKEN ==>', token) : console.log('NO TOKEN', token)
-    return Boolean(token)
+    return window.localStorage.getItem("uid");
 };
 
-export const getData = () => {
-    return token ? jwtDecode(token) : null;
+export const encryptData = (secreteKey, data) => {
+    return CryptoJS.AES.encrypt(JSON.stringify(data), (secreteKey + uniqueBaseKey)).toString();
+};
+
+export const decryptData = (secreteKey, data) => {
+    if (data) {
+        const bytes = CryptoJS.AES.decrypt(data, (secreteKey + uniqueBaseKey));
+        return JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
+    }
+};
+
+export const saveData = (key, data) => {
+    if (getData(key)) removeData(key);
+    window.localStorage.setItem(key, encryptData(key, data));
+};
+
+export const getData = (key) => {
+    return decryptData(key, window.localStorage.getItem(key));
+};
+
+export const clearData = () => {
+    window.localStorage.clear();
+};
+
+export const removeData = (key) => {
+    window.localStorage.removeItem(key);
+};
+
+export const sessionTimeout = async () => {
+    localStorage.clear();
 };

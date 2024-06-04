@@ -18,7 +18,7 @@ const StyledInputField = styled(TextField)(({ theme }) => ({
     }
 }))
 
-const InputField = ({ sx, isSelect, variant, value, onChange, isRequired, label, error, children, type, InputProps, inputProps }) => {
+const InputField = ({ sx, isSelect, variant, value, onChange, isRequired, label, error, children, type, InputProps, inputProps, placeholder }) => {
     return (
         <StyledInputField sx={sx}
             type={type} size='medium'
@@ -33,6 +33,7 @@ const InputField = ({ sx, isSelect, variant, value, onChange, isRequired, label,
             fullWidth
             InputProps={InputProps}
             inputProps={inputProps}
+            placeholder={placeholder}
         >
             {children}
         </StyledInputField>

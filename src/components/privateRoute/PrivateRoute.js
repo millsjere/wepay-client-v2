@@ -1,18 +1,19 @@
 import React from 'react'
 import { Outlet, Navigate } from 'react-router-dom'
-import { getData, isAuth } from '../../config/appConfig'
+import { getData, isAuth, sessionTimeout } from '../../config/appConfig'
 import Loader from '../Loader'
 import Layout from '../layout'
 
 
 const PrivateRoute = () => {
   const auth = isAuth()
-  // const currentTime = new Date().getTime()
-  const sessionTime = getData()
-  console.log(sessionTime)
+  const user = getData('uid')
+  const currentTime = new Date().getTime()
+  const sessionTime = getData('exp')
 
+  console.log(user)
 
-  if (auth) {
+  if (auth && Number(sessionTime) > Number(currentTime)) {
     return (
       <>
         <Layout>
@@ -23,6 +24,7 @@ const PrivateRoute = () => {
       </>
     )
   } else {
+    sessionTimeout()
     return (
       <>
         <Navigate to={'/'} replace />

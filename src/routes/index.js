@@ -45,7 +45,7 @@ const VerifyAccountRoute =
 {
     path: '/verify',
     component: VerifyAccount,
-    isAuth: false
+    isAuth: true
 }
 
 const DashboardRoute =

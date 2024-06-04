@@ -15,7 +15,7 @@ const AuthWrapper = ({ children, title, subtitle, image, order, imagePosition })
                 }}>
                     <p></p>
                     <Box p={4} sx={{ color: '#fff', bgcolor: 'rgba(255,255,255, 10%)', borderRadius: '10px', 'backdrop-filter': 'blur(20px)' }}>
-                        <Typography variant='h4' mb={2} fontWeight={200}>Get a loan from <br />GHs 1,000 to GHs 20,000</Typography>
+                        <Typography variant='h4' mb={2} fontWeight={200}>Get a loan from <br />GHs 1,000 - GHs 20,000</Typography>
                         <Typography variant='body1'>WePay enables you to access creditcard through our partner banks. Credit card services include hire-purchase, direct utility payments POS(Point of Sales) services and cash withdrawals from ATMs.</Typography>
                     </Box>
                 </Box>
@@ -28,8 +28,8 @@ const AuthWrapper = ({ children, title, subtitle, image, order, imagePosition })
                 }}>
                     <img src={Logo} width={150} alt="logo" style={{ cursor: 'pointer' }} onClick={() => navigate('/')} />
                     <Box width={{ xs: '80%', sm: '80%', md: '80%', lg: '45%' }} textAlign={'center'}>
-                        <Typography>{title}</Typography>
-                        <Typography>{subtitle}</Typography>
+                        {title}
+                        {subtitle}
                         {children}
                     </Box>
 

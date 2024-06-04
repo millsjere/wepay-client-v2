@@ -1,12 +1,13 @@
 import { InputAdornment, styled, TextField, Typography } from '@mui/material';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { loginUser, successModal } from '../../actions/actions';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import RoundButton from '../../components/RoundButton';
 import { ArrowForward, Call } from '@mui/icons-material';
 import AuthWrapper from './AuthWrapper';
 import Slide from '../../assets/images/slider1.jpg'
+import { getData, saveData } from '../../config/appConfig';
 import base from '../../config/apis';
 
 const InputField = styled(TextField)(({ theme }) => ({
@@ -27,36 +28,40 @@ const InputField = styled(TextField)(({ theme }) => ({
 
 
 const Login = (props) => {
-  const modalDispatch = useDispatch()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [load, setLoad] = React.useState(false)
   const [error, setError] = React.useState(false)
   const [phone, setPhone] = React.useState('')
 
-  const getAuth = async() => {
-    try {
-      const url = '/auth/request/'
-      const { data: res} = await base.get(url)
-      console.log(res)
-    } catch (error) {
-      console.log(error?.response)
-    }
-  }
-
-  useEffect(() => {
-    getAuth()
-  },[])
+  console.log(getData('uid'))
 
 
   const onFormSubmit = async () => {
     if (phone === '' || phone.length < 10) {
       setError(true)
-      modalDispatch({ type: 'ERROR_MODAL', payload: 'Invalid. Phone number must be 10 characters' })
+      dispatch({ type: 'ERROR', payload: 'Invalid. Phone number must be 10 characters' })
       return
     }
     // call action creators
-    setLoad(true)
-    await props.loginUser({ phone })
-    setLoad(false)
+    try {
+      setLoad(true)
+      const url = '/auth/login'
+      const { data: res } = await base.post(url, { phone })
+      if (res?.status === 'success') {
+        saveData('uac', res?.data?.ac)
+        saveData('uid', res?.data?.user)
+        saveData('exp', res?.expiry)
+        dispatch({ type: 'SUCCESS', payload: 'Login successful' })
+      }
+      setLoad(false)
+      navigate('/verify')
+    } catch (error) {
+      console.log(error?.response)
+      dispatch({ type: 'ERROR', payload: error?.response?.data?.message })
+    } finally {
+      setLoad(false)
+    }
   }
 
 

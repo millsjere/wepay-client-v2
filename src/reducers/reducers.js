@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 
 
-export const loaderReducer = ( loader = true, action) => {
+export const loaderReducer = (loader = true, action) => {
     switch (action.type) {
         case "LOADING":
             return true
@@ -12,7 +12,7 @@ export const loaderReducer = ( loader = true, action) => {
     }
 }
 
-export const popupReducer = ( popup = true, action) => {
+export const popupReducer = (popup = true, action) => {
     switch (action.type) {
         case "SHOW_POPUP":
             return false
@@ -26,15 +26,15 @@ export const popupReducer = ( popup = true, action) => {
 export const userReducer = (user = null, action) => {
     switch (action.type) {
         case "NEW_USER":
-            return {...action.payload}
+            return { ...action.payload }
         case "LOGIN_USER":
-            return {...action.payload}
+            return { ...action.payload }
         case "NO_USER":
-            return false 
+            return false
         case "LOGOUT_USER":
             return null
         default:
-           return user
+            return user
     }
 }
 
@@ -60,7 +60,7 @@ export const interestReducer = (interest = [], action) => {
     }
 }
 
-export const paymentReducer = ( payment = { items: [], total: 0 }, action) => {
+export const paymentReducer = (payment = { items: [], total: 0 }, action) => {
     switch (action.type) {
         case "USER_PAYMENT":
             const amtArray = action.payload.filter(pay => pay.status === 'confirmed').map(el => el.amount)
@@ -88,25 +88,23 @@ export const cardReducer = (card = {}, action) => {
 
 export const modalReducer = (modal = null, action) => {
     switch (action.type) {
-        case "LOADING_MODAL":
-            return { message : action.payload, status: 'loading' }
-        case "SUCCESS_MODAL":
-            return { message : action.payload, status: 'success' }
-        case "ERROR_MODAL":
-            return { message : action.payload, status: 'error' }
+        case "SUCCESS":
+            return { message: action.payload, status: 'success' }
+        case "ERROR":
+            return { message: action.payload, status: 'error' }
         case "RESET_MODAL":
             return null
         default:
-           return modal
+            return modal
     }
 }
 
 
 export default combineReducers({
     loader: loaderReducer,
-    currentUser: userReducer, 
-    modal: modalReducer, 
-    card: cardReducer, 
+    currentUser: userReducer,
+    modal: modalReducer,
+    card: cardReducer,
     notifications: notifyReducer,
     payment: paymentReducer,
     interest: interestReducer,
